@@ -1,0 +1,16 @@
+---
+- name: playing with varibles
+  hosts: futurama
+  gather_facts: yes
+
+  vars:
+          cisco: 192.168.1.1
+          juniperpw: qwerty
+  tasks:
+          - name: Learning to display to the screen
+            debug:
+                   var: ansible_distribution
+          - name: Create a file called the juniperpw
+            file:
+                    path: "~/{{ juniperpw }}.txt"
+                    state: touch

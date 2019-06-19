@@ -1,0 +1,21 @@
+---
+- name: learning prompting
+  hosts: ~^fut
+
+  vars_prompt:
+          - name: "yourpassword" # this is the var to define
+            prompt: "what is yourpassword?" #promt question
+            private: yes # do not echo password
+            confirm: yes # type it twice
+            default: "qwerty" # default value for the variable "yourpassword"
+            encrypt: sha512_crypt
+
+  tasks:
+          - name: print to screen
+            debug:
+                    var: yourpassword
+          - name: copy info a remote file
+            copy: 
+                   content: "{{yourpassword}}"
+                   dest: ~/yourpass.tct
+

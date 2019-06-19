@@ -1,0 +1,15 @@
+---
+- name: Learning about line in file
+  hosts: futurama
+  gather_facts: yes
+
+  tasks:
+          - name: putting a line in a file
+            lineinfile: 
+                    regexp: ^alien
+                    line: rotten bat
+                    path: ~/qwerty.txt
+                    create: yes
+                    backup: yes
+                    backrefs: yes
+

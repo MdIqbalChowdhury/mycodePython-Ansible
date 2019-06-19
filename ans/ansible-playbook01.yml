@@ -1,0 +1,16 @@
+---
+- name: My first play
+  hosts: futurama
+  become: yes
+
+  tasks:
+          - name: Create a file
+            file:
+                    path: ~/sshworkedansible.txt
+                    state: touch
+          - name: Manage bastet
+
+            apt: 
+                   name: bastet
+                   state: present  #present is default , but zach says put it here
+
