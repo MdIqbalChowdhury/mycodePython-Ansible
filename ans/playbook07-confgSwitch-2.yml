@@ -1,0 +1,41 @@
+---
+- name: Playing with switches and ansible
+  hosts: cloudswitches
+  gather_facts: no
+  vars:
+          ansible_connection: network_cli
+          ansible_network_os: eos
+          ansible_become: yes
+          ansible_become_method: enable
+          ansible_user: admin
+          ansible_ssh_pass: alta3
+          switchint: 13
+  tasks:
+          - name: Arista fact collection
+            eos_facts:
+                    gather_subset: all
+
+          - name: write out some facts to a local file
+            file:
+                    state: directory
+                    path: arista_config/
+
+          - name: copy content from our controller to a file
+            copy:
+                    content: "{{ ansible_facts }}"
+                    dest: "arista_config/{{ inventory_hostname }}.bkup"
+                    
+          - name: dig into ansible facts    
+            debug: 
+            #var: "{{  ansible_facts.net_interfaces | length }}"
+                    var: "{{ ansible_facts.net_interfaces }}"
+
+          - name: Precheck step one
+            fail: 
+                    msg: "The switch does not have the correct number of interfaces!"
+            when: ansible_facts.net_interfaces | length != switchint
+
+          - name: Precheck step two
+            fail: 
+                    msg: "The switch is not running firmware 4.17!"
+            when: "'4.17' not in ansible_facts.net_version" 

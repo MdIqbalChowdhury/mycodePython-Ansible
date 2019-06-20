@@ -1,0 +1,27 @@
+---
+- name: I need to copy unique patches to target servers
+  hosts: futurama
+
+  tasks:
+          - name: create a directory
+            file: 
+                   state: directory
+                   path: ~/patches/
+          - name: download our patches files
+            get_url:
+                    url: http://alta3.com/static/files/trouble.sh
+                    dest: "~/patches/{{inventory_hostname}}.patch"
+
+          - name: Results from from date lookup
+            command: date
+            register: results
+
+          - name: what the heck is results
+            debug: 
+                   var: results.stdout
+                   verbosity: 1
+
+          - name: Run the patch
+            command: "sh ~/patches/{{ inventory_hostname }}.patch"
+            when: "wed" in results.stdout"
+
